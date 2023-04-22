@@ -8,6 +8,9 @@
 #include "proc.h"
 #include "sysinfo.h"
 
+uint64 acquire_freemem();
+uint64 acquire_nproc();
+
 uint64
 sys_exit(void)
 {
@@ -114,6 +117,18 @@ sys_trace(void)
 uint64
 sys_sysinfo(void)
 {
-    printf("sysinfo say hi\n");
+    struct sysinfo info;
+    uint64 addr;
+    struct proc *p=myproc();
+
+    info.freemem=acquire_freemem();
+    info.nproc=acquire_nproc();
+
+    if(argaddr(0, &addr) < 0)//入参放到addr里
+        return -1;
+
+    if(copyout(p->pagetable, addr, (char *)&info, sizeof(info)) < 0)//函数运算后的info结果放到addr里
+        return -1;
+
     return 0;
 }

@@ -80,3 +80,21 @@ kalloc(void)
     memset((char*)r, 5, PGSIZE); // fill with junk
   return (void*)r;
 }
+
+uint64 acquire_freemem()
+{
+    struct run *r;
+
+    uint64 cnt=0;
+
+    acquire(&kmem.lock);
+    r = kmem.freelist;
+    while(r)
+    {
+        r=r->next;
+        cnt++;//链表的长度就是页表的个数
+    }
+    release(&kmem.lock);
+
+    return cnt*PGSIZE;//页表的个数乘以页表的大小就是整个系统空闲内存的大小
+}
