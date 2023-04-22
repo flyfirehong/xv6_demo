@@ -95,3 +95,10 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64
+sys_trace(void)
+{
+    ptintf("sys_trace:hi\n");
+    return 0;
+}
