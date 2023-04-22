@@ -99,7 +99,7 @@ sys_uptime(void)
 uint64
 sys_trace(void)
 {
-    int n;
+    int n;//n是从用户态传进来的掩码，比如追踪的是fork传进来的就是32
     if(argint(0, &n) < 0)
         return -1;
     printf("sys_trace:hi,n is %d\n",n);
