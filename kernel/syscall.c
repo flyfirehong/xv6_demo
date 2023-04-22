@@ -148,7 +148,7 @@ syscall(void)
       p->trapframe->a0 = syscalls[num]();//返回值放在a0这个寄存器中
       int mask=p->trace_mask;
       if((mask>>num)&1){
-          printf("%d: syscall %s -> \n",p->pid,syscall_names[num-1],p->trapframe->a0);
+          printf("%d: syscall %s -> %d\n",p->pid,syscall_names[num-1],p->trapframe->a0);
       }
   } else {
     printf("%d %s: unknown sys call %d\n",
