@@ -99,9 +99,13 @@ sys_uptime(void)
 uint64
 sys_trace(void)
 {
-    int n;//n是从用户态传进来的掩码，比如追踪的是fork传进来的就是32
-    if(argint(0, &n) < 0)
+    int mask;//n是从用户态传进来的掩码，比如追踪的是fork传进来的就是32
+    if(argint(0, &mask) < 0)
         return -1;
-    printf("sys_trace:hi,n is %d\n",n);
+    //printf("sys_trace:hi,n is %d\n",mask);
+
+    struct proc *p = myproc();
+    p->trace_mask=mask;//把掩码放到进程信息中
+
     return 0;
 }

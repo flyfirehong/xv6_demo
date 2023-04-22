@@ -145,8 +145,11 @@ syscall(void)
 
   num = p->trapframe->a7;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
-      printf("%s被调用了\n",syscall_names[num-1]);
-    p->trapframe->a0 = syscalls[num]();
+      p->trapframe->a0 = syscalls[num]();//返回值放在a0这个寄存器中
+      int mask=p->trace_mask;
+      if((mask>>num)&1){
+          printf("%d: syscall %s -> \n",p->pid,syscall_names[num-1],p->trapframe->a0);
+      }
   } else {
     printf("%d %s: unknown sys call %d\n",
             p->pid, p->name, num);
